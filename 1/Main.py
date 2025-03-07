@@ -21,6 +21,7 @@ async def main() -> None:
     except Exception as e: logging.error(f"Error in main: {e}")
     finally: await bot.close()
 
+
 if __name__ == '__main__':
     print(f'Digital assistant is running.............')
     try: asyncio.run(main())

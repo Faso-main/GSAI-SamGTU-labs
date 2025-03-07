@@ -9,8 +9,7 @@ router3=Router()
 async def cmd_start(message: types.Message):
     keyboard=create_keyboard()
     await message.answer(
-        "Привет! Я бот для помощи абитуриентам и студентам САМГТУ, ты можешь обратиться ко мне с любым вопросом,"
-        " и я очень постараюсь ответить тебе на него \U0001F49C \U0001F4AB",
+        "Привет! Я бот Говорун, говорю что хочу и когда хочу",
         reply_markup=keyboard
         )
 def register_handlers(router: Router):
