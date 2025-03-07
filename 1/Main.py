@@ -1,19 +1,18 @@
 import asyncio, os, logging
 from aiogram import Bot, Dispatcher
-from Handlers import Dispatch, Help, Survey
-from Handlers.Encoded import decoded_key
+from Handlers import Dispatch, Help
+from Handlers.Encoded import arato_key
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s-%(name)s-%(levelname)s-%(message)s")
 logger = logging.getLogger()
 
-token = os.getenv("TELEGRAM_BOT_TOKEN", '1445048965:AAEon3ejkn9RexdJoqs_VCEUsTTQtY-vYPQ')
+token = os.getenv("TELEGRAM_BOT_TOKEN", arato_key)
 bot = Bot(token)
 dp = Dispatcher()
 
 
 async def main() -> None:
     try:
-        dp.include_router(Survey.router1)
         dp.include_router(Dispatch.router3)
         dp.include_router(Help.router2)
         await bot.delete_webhook(drop_pending_updates=True)

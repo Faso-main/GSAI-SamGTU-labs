@@ -13,6 +13,7 @@ class Еncoder:
         decoded_data = base64.b64decode(bytes_encoded)
         return decoded_data.decode('utf-8')
 
+arato_key='1445048965:AAEon3ejkn9RexdJoqs_VCEUsTTQtY-vYPQ'
 encoded_data =Еncoder.encode('1445048965:AAEon3ejkn9RexdJoqs_VCEUsTTQtY-vYPQ')
 encoded='NzY0Nzc3MjI2MjpBQUVxbzd1T3BhNUJRU09aSC1WbnByajBHNlBJZ3J2bFBucw=='
 decoded_key = Еncoder.decode(encoded_data)
