@@ -7,7 +7,7 @@ def sigmoid_derivative(x): return x * (1 - x) # Производная сигм�
 
 
 # Класс для нейронной сети
-class SimpleNeuronLL:
+class LinearRegression:
     def __init__(self):
         # Инициализация весов случайными значениями
         self.weights = np.random.rand(1)  # Один вес для линейной регрессии
@@ -38,7 +38,7 @@ data_input=[item for item in range(2,11,2)] # [2,4,6,8,10]
 x_train = np.array(data_input)  # входные данные
 y_train = np.array([itr*2 for itr in data_input]) # y = 2x
 
-model = SimpleNeuronLL()
+model = LinearRegression()
 model.train(x_train, y_train, epochs=1000, learning_rate=0.01)
 
 test_batch = np.array([3, 5, 7]) # test batch

@@ -22,7 +22,7 @@ async def main() -> None:
 
 
 if __name__ == '__main__':
-    print(f'Digital assistant is running.............')
+    print(f'Govorun is running.............')
     try: asyncio.run(main())
     except KeyboardInterrupt: logging.info("Bot stopped by user.")
     except Exception as e: logging.error(f"Error: {e}")
