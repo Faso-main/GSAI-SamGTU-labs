@@ -1,0 +1,55 @@
+% === Skywalker Family Knowledge Base ===
+
+% https://swish.swi-prolog.org/
+
+% Characters and their genders
+person(shmi, female).
+person(anakin, male).
+person(padme, female).
+person(luke, male).
+person(leia, female).
+person(han, male).
+person(ben_solo, male).
+person(rey, female).
+
+% Special biological facts
+force_sensitive(anakin).
+force_sensitive(luke).
+force_sensitive(leia).
+force_sensitive(ben_solo).
+force_sensitive(rey).
+
+% Core relationships (canon)
+parent(shmi, anakin).                % Shmi is Anakin's mother (no father)
+parent(anakin, luke).                % Anakin is Luke's father
+parent(anakin, leia).                % Anakin is Leia's father
+parent(padme, luke).                 % Padme is Luke's mother
+parent(padme, leia).                 % Padme is Leia's mother
+parent(leia, ben_solo).              % Leia is Ben Solo's mother
+parent(han, ben_solo).               % Han is Ben Solo's father
+
+% Controversial relationships (spoilers!)
+possible_parent(rey, anakin).         % Some fan theories suggest...
+possible_parent(rey, luke).           % Multiple possibilities for Rey
+
+% Twin relationship
+twin(X, Y) :- 
+    parent(Z, X), parent(Z, Y), 
+    X \= Y, 
+    ((X = luke, Y = leia); (X = leia, Y = luke)).
+
+% Jedi Master-Padawan relationship (not strictly familial)
+master_padawan(X, Y) :-
+    (X = obi_wan, Y = anakin);
+    (X = luke, Y = rey).
+
+% Sith lineage
+sith_master_apprentice(X, Y) :-
+    (X = palpatine, Y = anakin);
+    (X = snoke, Y = ben_solo).
+
+% Force-dyad (special bond)
+force_dyad(X, Y) :-
+    (X = rey, Y = ben_solo);
+    (X = ben_solo, Y = rey).
+
