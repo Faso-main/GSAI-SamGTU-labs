@@ -1,6 +1,7 @@
 from aiogram import types, Router
 from aiogram.filters.command import Command
 from Handlers.Keyboards import create_keyboard
+from aiogram.types import Message, ReplyKeyboardRemove
 
 
 router_dispatch=Router()
@@ -10,6 +11,6 @@ async def cmd_start(message: types.Message):
     keyboard=create_keyboard()
     await message.answer(
         "Привет! Я бот TTT, делаю, что хочу",
-        reply_markup=keyboard
+        reply_markup=ReplyKeyboardRemove()
         )
 
