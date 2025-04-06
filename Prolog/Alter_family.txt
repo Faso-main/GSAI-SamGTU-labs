@@ -1,0 +1,69 @@
+% === Stark Family Knowledge Base ===
+
+% Characters and their genders
+person(rickard, male).
+person(lyarra, female).
+person(eddard, male).
+person(catelyn, female).
+person(brandon, male).
+person(lyanna, female).
+person(benjen, male).
+person(robb, male).
+person(sansa, female).
+person(arya, female).
+person(bran, male).
+person(rickon, male).
+person(jon_snow, male).  % (secret Targaryen, but raised as a Stark)
+
+% Special traits
+warg(bran).
+warg(arya).              % In the books, Arya has wolf dreams
+warg(jon_snow).          % Suggested in the books
+has_sword(arya, needle).
+has_sword(jon_snow, longclaw).
+
+% Core relationships (canon)
+parent(rickard, eddard).         % Rickard is Ned's father
+parent(lyarra, eddard).          % Lyarra is Ned's mother
+parent(rickard, brandon).        % Brandon Stark (older brother)
+parent(rickard, lyanna).         % Lyanna Stark (sister)
+parent(rickard, benjen).         % Benjen Stark (younger brother)
+parent(eddard, robb).            % Ned is Robb's father
+parent(catelyn, robb).           % Catelyn is Robb's mother
+parent(eddard, sansa).           % Ned is Sansa's father
+parent(catelyn, sansa).          % Catelyn is Sansa's mother
+parent(eddard, arya).            % Ned is Arya's father
+parent(catelyn, arya).           % Catelyn is Arya's mother
+parent(eddard, bran).            % Ned is Bran's father
+parent(catelyn, bran).           % Catelyn is Bran's mother
+parent(eddard, rickon).          % Ned is Rickon's father
+parent(catelyn, rickon).         % Catelyn is Rickon's mother
+
+% Controversial relationships (spoilers!)
+possible_parent(lyanna, jon_snow).  % R + L = J theory (confirmed in the show)
+possible_parent(rhaegar, jon_snow). % Jon's true father
+
+% Sibling relationships
+sibling(X, Y) :- 
+    parent(Z, X), parent(Z, Y), 
+    X \= Y.
+
+% Direwolves (Stark sigil)
+has_direwolf(X, Y) :-
+    (X = robb, Y = grey_wind);
+    (X = sansa, Y = lady);
+    (X = arya, Y = nymeria);
+    (X = bran, Y = summer);
+    (X = rickon, Y = shaggydog);
+    (X = jon_snow, Y = ghost).
+
+% Mentorship (non-familial)
+mentor(X, Y) :-
+    (X = syrio_forel, Y = arya);   % Arya's "dancing master"
+    (X = brynden_tully, Y = catelyn); % "Blackfish"
+    (X = maester_luwin, Y = bran). 
+
+% Notable alliances
+ally(X, Y) :-
+    (X = eddard, Y = robert_baratheon);
+    (X = robb, Y = walder_frey).    % (until the Red Wedding...)
