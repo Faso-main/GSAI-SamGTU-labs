@@ -1,0 +1,60 @@
+% === База знаний: Династия Клеонов (Основание Азимова) ===  
+% Версия с 4+ поколениями, клонированием и тайнами  
+
+% Типы сущностей  
+person(cleon_I, male).                  % Первый Клеон  
+person(demerzel, non_human).            % Робот-советник  
+person(cleon_II, male).                 % Клон-преемник  
+person(cleon_III, male).                % Последний "стабильный" клон  
+person(cleon_IV, male).                 % Деградирующий клон  
+person(cleon_V, male).                  % Ребёнок-клон (неудачный эксперимент)  
+person(zephyr_hallow, male).            % Тайный сын Клеона III  
+person(sareth, female).                 % Жена Клеона IV (интриганка)  
+
+% --- Биологические и искусственные связи ---  
+% Официальная линия: все Клеоны — "копии" оригинала  
+clone_of(cleon_I, cleon_I).             % Первый — сам себе предок  
+clone_of(cleon_I, cleon_II).            % Клеон II — клон оригинала  
+clone_of(cleon_I, cleon_III).  
+clone_of(cleon_I, cleon_IV).  
+clone_of(cleon_III, cleon_V).           % Клеон V — клон III-го (не I-го!)  
+
+% Тайное родство (Демерзель как "мать" клонов)  
+creator(demerzel, cleon_II).            % Демерзель создала клонов  
+creator(demerzel, cleon_III).  
+
+% Скрытый сын Клеона III (не клон!)  
+biological_child(zephyr_hallow, cleon_III).  
+biological_child(zephyr_hallow, unknown_mother).  
+
+% Брак Клеона IV (фиктивный)  
+married(cleon_IV, sareth).  
+
+% --- Политические роли ---  
+emperor(cleon_I, 1).  
+emperor(cleon_II, 2).  
+emperor(cleon_III, 3).  
+emperor(cleon_IV, 4).  
+emperor(cleon_V, 5).  
+
+assassin(cleon_IV, cleon_III).          % Клеон IV убил III-го  
+assassin(sareth, cleon_IV).             % Сарэт отравила IV-го  
+
+% --- Генетические аномалии ---  
+genetic_defect(cleon_IV).               % Деградация ДНК  
+genetic_defect(cleon_V).                % Нежизнеспособен  
+
+% --- Правила для анализа ---  
+% Кто является "истинным" Батлером?  
+true_batler(X) :- clone_of(cleon_I, X), \+ genetic_defect(X).  
+
+% Кто мог претендовать на трон (включая тайных детей)?  
+potential_heir(X) :-  
+    (clone_of(_, X);  
+    (biological_child(X, Y), emperor(Y, _)).  
+
+% Найти всех, кого создала Демерзель  
+demerzels_creation(X) :- creator(demerzel, X).  
+
+% Найти убийц и их жертв  
+regicide(Killer, Victim) :- assassin(Killer, Victim).  

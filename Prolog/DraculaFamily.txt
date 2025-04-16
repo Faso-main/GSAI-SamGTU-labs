@@ -1,0 +1,107 @@
+% === База знаний: Семья Дракулы (Дракула + расширенная вселенная) ===  
+
+% https://swish.swi-prolog.org/
+
+%%%%%%%%%%%%%
+% 1. Персонажи и их типы %
+%%%%%%%%%%%%%
+
+% Основные вампиры
+person(vlad_tepes, male).               % Граф Дракула (основатель)
+person(mirena, female).                 % Жена Влади (убита турками)
+person(valeria, female).                % Дочь-вампир (из фильмов)
+person(alucard, male).                  % Сын Адриан (дхампир)
+person(lilith, female).                 % Демоница-мать (по мифам)
+
+% Охотники на вампиров
+person(abraham_van_helsing, male).      % Профессор Ван Хельсинг
+person(quincey_harker, male).           % Сын Мины и Джонатана
+person(sofia, female).                  % Потомок Ван Хельсинга (из фильмов)
+
+% Жертвы/потомки
+person(mina_murray, female).            % Мина Харкер
+person(jonathan_harker, male).          % Джонатан Харкер
+person(elena, female).                  % Внучка Дракулы (альтернативные линии)
+
+% Особые статусы
+creature_type(vlad_tepes, vampire).
+creature_type(alucard, dhampir).        % Гибрид вампира и человека
+creature_type(lilith, demon).
+creature_type(quincey_harker, human).
+creature_type(sofia, vampire_hunter).
+
+%%%%%%%%%%%%%
+% 2. Родственные связи %
+%%%%%%%%%%%%%
+
+% Основная линия
+father(vlad_tepes, alucard).            % Дракула → Алукард
+mother(mirena, alucard).                % Мирена → Алукард (человек)
+
+% Альтернативные линии (из фильмов)
+father(vlad_tepes, valeria).            % Дракула → Валерия (вампир)
+mother(lilith, vlad_tepes).             % Лилит → Дракула (демоническое происхождение)
+
+% Связи с жертвами (превращение в вампиров)
+turned(vlad_tepes, mina_murray).        % Дракула превратил Мину
+married(jonathan_harker, mina_murray).  % Джонатан и Мина
+father(jonathan_harker, quincey_harker). % Их сын Куинси
+
+% Тайные потомки
+biological_child(sofia, abraham_van_helsing). % София — дочь Ван Хельсинга
+adopted(sofia, alucard).                % Алукард её воспитал
+
+%%%%%%%%%%%%%
+% 3. Артефакты и проклятия %
+%%%%%%%%%%%%%
+
+% Артефакты
+owns(vlad_tepes, "Кольцо Дракона").     % Даёт контроль над тенью
+owns(alucard, "Меч Предателя").         % Оружие против вампиров
+owns(abraham_van_helsing, "Дневник вампира"). % Записи о слабостях
+
+% Проклятия
+cursed(vlad_tepes, "Бессмертие").       % Не может умереть
+cursed(mina_murray, "Проклятие крови"). % Связь с Дракулой
+blessed(quincey_harker, "Чистота крови"). % Иммунитет к вампиризму
+
+%%%%%%%%%%%%%
+% 4. Правила для анализа %
+%%%%%%%%%%%%%
+
+% Кто является чистым вампиром?
+pure_vampire(X) :- 
+    creature_type(X, vampire),
+    father(vlad_tepes, X).
+
+% Кто гибрид (дхампир)?
+hybrid(X) :- creature_type(X, dhampir).
+
+% Кто унаследовал артефакты?
+artifact_heir(X, Artifact) :- 
+    owns(Y, Artifact),
+    (father(Y, X); mother(Y, X); adopted(X, Y)).
+
+% Кто может убить Дракулу?
+can_kill_dracula(X) :- 
+    (owns(X, "Меч Предателя"); 
+     blessed(X, "Чистота крови")).
+
+% Найти всех, кто связан проклятием
+cursed_family(X) :- 
+    cursed(X, _); 
+    (father(Y, X), cursed(Y, _)); 
+    (mother(Y, X), cursed(Y, _)).
+
+%%%%%%%%%%%%%
+% 5. События и конфликты %
+%%%%%%%%%%%%%
+
+% Кто кого убил?
+killed(vlad_tepes, mirena).             % Дракула убил жену
+killed(quincey_harker, vlad_tepes).     % Куинси убил Дракулу (в романе)
+killed(alucard, lilith).                % Алукард убил Лилит
+
+% Битвы
+battle(alucard, vlad_tepes, 1895).      % Отец vs сын
+allies(sofia, abraham_van_helsing).     % София и Ван Хельсинг

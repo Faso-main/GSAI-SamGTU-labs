@@ -1,6 +1,6 @@
 % === Skywalker Family Knowledge Base ===
 
-% https://swish.swi-prolog.org/
+
 
 % Characters and their genders
 person(shmi, female).
