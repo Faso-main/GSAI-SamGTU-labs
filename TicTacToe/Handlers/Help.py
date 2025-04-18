@@ -27,109 +27,123 @@ EMPTY_CELL = "⬜"
 X_CELL = "❌"
 O_CELL = "⭕"
 
-# Уровни сложности (теперь только два)
+# Уровни сложности
 DIFFICULTY_LEVELS = {
     "easy": "Легкий (случайные ходы)",
-    "medium": "Средний (базовая логика)"
+    "medium": "Средний (базовая логика)",
+    "hard": "Сложный (непобедимый)"
 }
 current_difficulty = "medium"
 
 def draw_board():
-    emoji_board = []
-    for cell in game_board:
-        if cell == "X":
-            emoji_board.append(X_CELL)
-        elif cell == "O":
-            emoji_board.append(O_CELL)
-        else:
-            emoji_board.append(EMPTY_CELL)
-    
     board = ""
     for i in range(0, 9, 3):
-        board += f"{emoji_board[i]}{emoji_board[i+1]}{emoji_board[i+2]}\n"
+        row = []
+        for cell in game_board[i:i+3]:
+            if cell == "X":
+                row.append(X_CELL)
+            elif cell == "O":
+                row.append(O_CELL)
+            else:
+                row.append(EMPTY_CELL)
+        board += "".join(row) + "\n"
     return board
 
-def check_winner():
+def check_winner(board=None):
+    if board is None:
+        board = game_board
+    
     # Проверка строк
     for i in range(0, 9, 3):
-        if game_board[i] == game_board[i+1] == game_board[i+2] != " ":
-            return game_board[i]
+        if board[i] == board[i+1] == board[i+2] != " ":
+            return board[i]
     
     # Проверка столбцов
     for i in range(3):
-        if game_board[i] == game_board[i+3] == game_board[i+6] != " ":
-            return game_board[i]
+        if board[i] == board[i+3] == board[i+6] != " ":
+            return board[i]
     
     # Проверка диагоналей
-    if game_board[0] == game_board[4] == game_board[8] != " ":
-        return game_board[0]
-    if game_board[2] == game_board[4] == game_board[6] != " ":
-        return game_board[2]
+    if board[0] == board[4] == board[8] != " ":
+        return board[0]
+    if board[2] == board[4] == board[6] != " ":
+        return board[2]
     
     # Проверка на ничью
-    if " " not in game_board:
+    if " " not in board:
         return "D"
     
     return None
 
+def minimax(board, depth, is_maximizing):
+    winner = check_winner(board)
+    
+    if winner == "O":
+        return 10 - depth
+    elif winner == "X":
+        return depth - 10
+    elif winner == "D":
+        return 0
+    
+    if is_maximizing:
+        best_score = -float('inf')
+        for i in range(9):
+            if board[i] == " ":
+                board[i] = "O"
+                score = minimax(board, depth + 1, False)
+                board[i] = " "
+                best_score = max(score, best_score)
+        return best_score
+    else:
+        best_score = float('inf')
+        for i in range(9):
+            if board[i] == " ":
+                board[i] = "X"
+                score = minimax(board, depth + 1, True)
+                board[i] = " "
+                best_score = min(score, best_score)
+        return best_score
+
 def bot_move():
     empty_cells = [i for i, cell in enumerate(game_board) if cell == " "]
     
-    # Легкий уровень - случайные ходы
     if current_difficulty == "easy":
         return random.choice(empty_cells) if empty_cells else None
     
-    # Средний уровень
-    # 1. Сначала проверяем, может ли бот выиграть
-    for cell in empty_cells:
-        game_board[cell] = "O"
-        if check_winner() == "O":
+    elif current_difficulty == "medium":
+        # Проверка на победу бота
+        for cell in empty_cells:
+            game_board[cell] = "O"
+            if check_winner() == "O":
+                game_board[cell] = " "
+                return cell
             game_board[cell] = " "
-            return cell
-        game_board[cell] = " "
-    
-    # 2. Проверяем, может ли выиграть игрок, чтобы блокировать
-    for cell in empty_cells:
-        game_board[cell] = "X"
-        if check_winner() == "X":
+        
+        # Блокировка игрока
+        for cell in empty_cells:
+            game_board[cell] = "X"
+            if check_winner() == "X":
+                game_board[cell] = " "
+                return cell
             game_board[cell] = " "
-            return cell
-        game_board[cell] = " "
+        
+        # Случайный ход
+        return random.choice(empty_cells) if empty_cells else None
     
-    # 3. Случайный ход
-    return random.choice(empty_cells) if empty_cells else None
-
-async def animate_bot_move(message: Message, cell_index: int):
-    temp_board = game_board.copy()
-    for emoji in ["🔵", "⚪", "🔴"]:
-        temp_board[cell_index] = emoji
-        await message.edit_text(
-            f"🤖 Бот думает ({DIFFICULTY_LEVELS[current_difficulty]})...\n\n{draw_animated_board(temp_board)}"
-        )
-        await asyncio.sleep(0.3)
-    
-    temp_board[cell_index] = "O"
-    await message.edit_text(
-        f"🤖 Бот походил!\n\n{draw_animated_board(temp_board)}"
-    )
-    await asyncio.sleep(0.5)
-
-def draw_animated_board(board):
-    emoji_board = []
-    for cell in board:
-        if cell == "X":
-            emoji_board.append(X_CELL)
-        elif cell == "O":
-            emoji_board.append(O_CELL)
-        elif cell in ["🔵", "⚪", "🔴"]:
-            emoji_board.append(cell)
-        else:
-            emoji_board.append(EMPTY_CELL)
-    
-    animated_board = ""
-    for i in range(0, 9, 3):
-        animated_board += f"{emoji_board[i]}{emoji_board[i+1]}{emoji_board[i+2]}\n"
-    return animated_board
+    elif current_difficulty == "hard":
+        best_score = -float('inf')
+        best_move = None
+        
+        for cell in empty_cells:
+            game_board[cell] = "O"
+            score = minimax(game_board, 0, False)
+            game_board[cell] = " "
+            
+            if score > best_score:
+                best_score = score
+                best_move = cell
+        
+        return best_move
 
 def create_game_keyboard():
     builder = ReplyKeyboardBuilder()
@@ -150,7 +164,7 @@ def create_difficulty_keyboard():
 async def handle_message(message: Message, state: FSMContext):
     global game_board, current_player, game_active, player_score, bot_score, draws, current_difficulty
     
-    if message.text.lower() in ["play"]:
+    if message.text.lower() in ["play", "играть", "начать"]:
         await message.answer(
             "🎮 Выберите уровень сложности:",
             reply_markup=create_difficulty_keyboard()
@@ -185,12 +199,6 @@ async def handle_message(message: Message, state: FSMContext):
         if game_board[cell_index] == " ":
             game_board[cell_index] = "X"
             
-            msg = await message.answer(
-                f"Ваш ход...\n\n{draw_board()}",
-                reply_markup=create_game_keyboard()
-            )
-            await asyncio.sleep(0.5)
-            
             winner = check_winner()
             if winner == "X":
                 player_score += 1
@@ -211,12 +219,10 @@ async def handle_message(message: Message, state: FSMContext):
                 await state.clear()
                 return
             
+            # Ход бота
             bot_cell = bot_move()
             if bot_cell is not None:
-                temp_msg = await message.answer(f"🤖 Бот думает...")
-                await animate_bot_move(temp_msg, bot_cell)
                 game_board[bot_cell] = "O"
-                await temp_msg.delete()
                 
                 winner = check_winner()
                 if winner == "O":
