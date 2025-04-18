@@ -28,7 +28,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Точность модели LightGBM на тестовых данных: {accuracy:.2f}")
 
 # Прогнозирование для тестового пациента
-test_patient = np.array([test_patient])
+test_patient = np.array([test_patient_1])
 probability_diabetes = lgbm.predict_proba(test_patient)[:, 1][0]
 predicted_class = lgbm.predict(test_patient)[0]
 
