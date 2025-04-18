@@ -2,7 +2,7 @@ import lightgbm as lgb
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import numpy as np
-import from medica_data import *
+from  medica_data import *
 
 
 
