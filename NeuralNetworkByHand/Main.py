@@ -2,6 +2,7 @@ import numpy as np
 import random
 
 class Neuron:
+    
     def __init__(self, num_inputs):
         self.weights = [random.uniform(-1, 1) for _ in range(num_inputs)]
         self.bias = random.uniform(-1, 1)
