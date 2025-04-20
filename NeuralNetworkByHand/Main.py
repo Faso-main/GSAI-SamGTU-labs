@@ -1,8 +1,9 @@
 import numpy as np
 import random
+from medica_data import * 
+
 
 class Neuron:
-    
     def __init__(self, num_inputs):
         self.weights = [random.uniform(-1, 1) for _ in range(num_inputs)]
         self.bias = random.uniform(-1, 1)
@@ -69,37 +70,19 @@ class NeuralNetwork:
             if epoch % 100 == 0:
                 print(f"Epoch {epoch}, Error: {total_error/len(X)}")
 
-# Упрощенные медицинские данные (нормализованные)
-# [беременности, глюкоза, давление, толщина кожи, инсулин, ИМТ, родословная, возраст]
-medical_data = [
-    [0.08, 0.14, 0.47, 0.22, 0.30, 0.37, 0.25, 0.29],  # нет диабета
-    [0.42, 0.85, 0.72, 0.51, 0.63, 0.46, 0.51, 0.54],  # диабет
-    [0.17, 0.13, 0.44, 0.19, 0.28, 0.34, 0.19, 0.31],  # нет
-    [0.33, 0.68, 0.63, 0.42, 0.58, 0.52, 0.47, 0.48],  # диабет
-    [0.25, 0.15, 0.51, 0.25, 0.32, 0.39, 0.22, 0.35],  # нет
-]
 
-# Метки (1 - диабет, 0 - нет диабета)
-labels = [
-    [0],
-    [1],
-    [0],
-    [1],
-    [0]
-]
 
-# Создаем сеть: 8 входов, 4 нейрона в скрытом слое, 1 выход
+# Создаем сеть
 nn = NeuralNetwork([8, 4, 1])
 
 # Обучаем сеть
-nn.train(medical_data, labels, epochs=1000, learning_rate=0.1)
+nn.train(medical_data_expended, labels_expended, epochs=1000, learning_rate=0.1)
 
-# Тестируем на новых данных
-test_patient = [0.38, 0.72, 0.68, 0.47, 0.61, 0.49, 0.53, 0.51]  # Ожидаем диабет
+# Тестируем
+test_patient = [0.38, 0.72, 0.68, 0.47, 0.61, 0.49, 0.53, 0.51]
 prediction = nn.forward(test_patient)
-print(f"\nВероятность диабета у тестового пациента: {prediction[0]*100:.2f}%")
+print(f"\nВероятность диабета: {prediction[0]*100:.2f}%")
 
-# Интерпретация результата
 threshold = 0.5
 result = "Диабет" if prediction[0] > threshold else "Нет диабета"
 print(f"Диагноз: {result} (порог {threshold})")

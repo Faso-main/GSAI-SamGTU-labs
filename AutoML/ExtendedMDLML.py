@@ -8,12 +8,12 @@ import pandas as pd
 from medica_data import *
 
 # Тестовые пациенты
-test_patient_1 = [0.15, 0.20, 0.52, 0.26, 0.33, 0.40, 0.29, 0.37]
-test_patient_2 = [0.60, 0.82, 0.70, 0.51, 0.66, 0.55, 0.58, 0.62]
+test_patient_1 = [0.15, 0.20, 0.52, 0.26, 0.33, 0.40, 0.29, 0.37] # нет диабета
+test_patient_2 = [0.60, 0.82, 0.70, 0.51, 0.66, 0.55, 0.58, 0.62] # диабет
 
 # Подготовка данных
-X = np.array(medical_data_extended_1)
-y = np.array(labels_extended_1).flatten()
+X = np.array(medical_data_expended)
+y = np.array(labels_expended).flatten()
 
 # Проверка баланса классов (исходного набора данных)
 unique_original, counts_original = np.unique(y, return_counts=True)
