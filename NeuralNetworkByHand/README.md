@@ -96,3 +96,8 @@ print(f"Вероятность диабета: {prediction[0]:.2f}")
 # Бинарный вывод
 diagnosis = "Есть диабет" if prediction[0] > 0.5 else "Нет диабета"
 print(diagnosis)
+
+
+![alt text](image.png)
+
+#https://causeweb.org/tshs/
