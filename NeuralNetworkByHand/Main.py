@@ -2,7 +2,9 @@ import numpy as np
 import random
 from medica_data import * 
 
+#print(f'Medical data lengh: {len(medical_data_expended)}\n\nMedical data example: {medical_data_expended[453]}')
 
+"""
 class Neuron:
     def __init__(self, num_inputs):
         self.weights = [random.uniform(-1, 1) for _ in range(num_inputs)]
@@ -85,4 +87,4 @@ print(f"\nВероятность диабета: {prediction[0]*100:.2f}%")
 
 threshold = 0.5
 result = "Диабет" if prediction[0] > threshold else "Нет диабета"
-print(f"Диагноз: {result} (порог {threshold})")
+print(f"Диагноз: {result} (порог {threshold})")"""
