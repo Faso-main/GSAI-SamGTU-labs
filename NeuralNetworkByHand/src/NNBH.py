@@ -1,8 +1,23 @@
 import numpy as np
-import random
-from NeuralNetworkByHand.medica_data_generation import * 
+import random, os
+import pandas as pd
 
 
+# Configuration
+CSV_PATH=os.path.join('NeuralNetworkByHand','src','medical_data.csv')
+EPOCHS=1000
+LEARNING_RATE=0.1
+THRESHOLD=0.5
+
+
+# Загрузка данных из CSV файла
+def load_data_from_csv(filename):
+    data = pd.read_csv(filename)
+    X = data.drop('diabetic', axis=1).values.tolist()
+    y = [[label] for label in data['diabetic'].values]  # Преобразуем в формат [[0], [1], ...]
+    return X, y
+
+# Класс нейрона
 class Neuron:
     def __init__(self, num_inputs):
         self.weights = [random.uniform(-1, 1) for _ in range(num_inputs)]
@@ -30,6 +45,7 @@ class Neuron:
             self.weights[i] += learning_rate * self.error * self.inputs[i]
         self.bias += learning_rate * self.error
 
+# Класс нейронной сети
 class NeuralNetwork:
     def __init__(self, layers):
         self.layers = []
@@ -58,7 +74,7 @@ class NeuralNetwork:
             for neuron in layer:
                 neuron.update_weights(learning_rate)
     
-    def train(self, X, y, epochs=1000, learning_rate=0.1):
+    def train(self, X, y, epochs=EPOCHS, learning_rate=LEARNING_RATE):
         for epoch in range(epochs):
             total_error = 0
             for x, target in zip(X, y):
@@ -70,19 +86,34 @@ class NeuralNetwork:
             if epoch % 100 == 0:
                 print(f"Epoch {epoch}, Error: {total_error/len(X)}")
 
+# Основной код
+if __name__ == "__main__":
+    try:
+        # Загрузка данных
+        X, y = load_data_from_csv(CSV_PATH)
+        print(f"Успешно загружено {len(X)} примеров")
+        
+        # Создаем и обучаем сеть
+        nn = NeuralNetwork([8, 4, 1])
+        nn.train(X, y, epochs=1000, learning_rate=0.1)
 
+        # Тестовые пациенты
+        test_patient_1 = [0.15, 0.20, 0.52, 0.26, 0.33, 0.40, 0.29, 0.37]  # нет диабета
+        test_patient_2 = [0.60, 0.82, 0.70, 0.51, 0.66, 0.55, 0.58, 0.62]  # диабет
 
-# Создаем сеть
-nn = NeuralNetwork([8, 4, 1])
+        # Тестирование
+        def test_patient(network, patient_data):
+            prediction = network.forward(patient_data)
+            print(f"\nВероятность диабета: {prediction[0]*100:.2f}%")
+            threshold = THRESHOLD
+            result = "Диабет" if prediction[0] > threshold else "Нет диабета"
+            print(f"Диагноз: {result} (порог {threshold})")
 
-# Обучаем сеть
-nn.train(medical_data_expended, labels_expended, epochs=1000, learning_rate=0.1)
+        print("\nТестирование пациентов:")
+        print("\nПациент 1 (ожидается: нет диабета):")
+        test_patient(nn, test_patient_1)
+        
+        print("\nПациент 2 (ожидается: диабет):")
+        test_patient(nn, test_patient_2)
 
-# Тестируем
-test_patient = [0.38, 0.72, 0.68, 0.47, 0.61, 0.49, 0.53, 0.51]
-prediction = nn.forward(test_patient)
-print(f"\nВероятность диабета: {prediction[0]*100:.2f}%")
-
-threshold = 0.5
-result = "Диабет" if prediction[0] > threshold else "Нет диабета"
-print(f"Диагноз: {result} (порог {threshold})")
+    except Exception as e: print(f"Ошибка: {str(e)}")
