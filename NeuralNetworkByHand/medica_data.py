@@ -1,6 +1,10 @@
 import numpy as np
 import random
+import csv, os
 
+
+# Configuration
+CSV_PATH=os.path.join('NeuralNetworkByHand','medical_data.csv')
 
 # Генерация данных
 def generate_healthy(n):
@@ -38,6 +42,23 @@ def generate_diabetic(n):
     return data
 
 # Создаем данные
-half_size = 1024
+half_size = 10000
 medical_data_expended = generate_healthy(half_size) + generate_diabetic(half_size)
-labels_expended = [[0] for _ in range(half_size)] + [[1] for _ in range(half_size)]  # Исправленный формат меток
+labels_expended = [0 for _ in range(half_size)] + [1 for _ in range(half_size)]  # Упрощенный формат меток
+
+# Объединяем данные и метки
+data_with_labels = [features + [label] for features, label in zip(medical_data_expended, labels_expended)]
+
+# Заголовки для CSV файла
+headers = [
+    'feature1', 'feature2', 'feature3',
+    'feature4','feature5', 'feature6',
+    'feature7', 'feature8','diabetic'
+]
+
+# Сохраняем в CSV файл
+with open(CSV_PATH, mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(headers)  
+    writer.writerows(data_with_labels)  
+
