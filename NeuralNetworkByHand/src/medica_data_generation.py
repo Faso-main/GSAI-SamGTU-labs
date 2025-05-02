@@ -4,7 +4,7 @@ import csv, os
 
 
 # Configuration
-CSV_PATH=os.path.join('NeuralNetworkByHand','medical_data.csv')
+CSV_PATH=os.path.join('NeuralNetworkByHand','src','medical_data.csv')
 
 # Генерация данных
 def generate_healthy(n):
