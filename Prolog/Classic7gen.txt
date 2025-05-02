@@ -1,0 +1,206 @@
+/* 
+% https://swish.swi-prolog.org/ 
+*/
+
+% Generation 1 (Earliest ancestors)
+person(john_sr, male, 1850, 1920).
+person(mary_sr, female, 1855, 1925).
+person(george_i, male, 1845, 1910).
+person(anne_i, female, 1852, 1918).
+
+% Generation 2
+person(john_jr, male, 1880, 1950).
+person(elizabeth_i, female, 1882, 1960).
+person(robert, male, 1885, 1970).
+person(margaret, female, 1888, 1975).
+person(edward, male, 1890, 1980).
+person(george_ii, male, 1883, 1955).
+
+% Generation 3
+person(william_i, male, 1910, 1990).
+person(mary_ii, female, 1912, 2000).
+person(henry, male, 1915, 2005).
+person(emma, female, 1918, 2010).
+person(thomas, male, 1920, 2015).
+person(george_iii, male, 1925, 2018).
+person(sarah, female, 1930, 2020).
+person(richard, male, 1935, 2022).
+
+% Generation 4
+person(john_iii, male, 1940, 2021).
+person(anne_ii, female, 1945, alive).
+person(philip, male, 1950, alive).
+person(grace, female, 1955, alive).
+person(michael, male, 1960, alive).
+person(diana, female, 1965, alive).
+person(edward_ii, male, 1970, alive).
+person(sophie, female, 1975, alive).
+
+% Generation 5
+person(william_ii, male, 1980, alive).
+person(catherine, female, 1985, alive).
+person(harry, male, 1990, alive).
+person(meghan, female, 1995, alive).
+person(olivia, female, 2000, alive).
+person(james, male, 2005, alive).
+person(charlotte, female, 2010, alive).
+
+% Generation 6 (Youngest generation)
+person(george_iv, male, 2020, alive).
+person(amelia, female, 2022, alive).
+person(arthur, male, 2023, alive).
+person(lily, female, 2025, alive).
+
+% Generation 7 (Newborns)
+person(leo, male, 2030, alive).
+person(isla, female, 2030, alive).
+
+% Marriages (including multiple marriages and same-sex unions)
+married(john_sr, mary_sr, 1875, 1920). % Until death
+married(george_i, anne_i, 1870, 1910). % Until death
+married(john_jr, elizabeth_i, 1905, 1950). % Until death
+married(robert, margaret, 1910, 1970). % Until death
+married(william_i, mary_ii, 1935, 1990). % Until death
+married(henry, emma, 1940, 2005). % Until death
+married(john_iii, anne_ii, 1970, 2021). % Until death
+married(philip, grace, 1980, null). % Still married
+married(michael, diana, 1990, 2015). % Divorced
+married(edward_ii, sophie, 2000, null). % Still married
+married(william_ii, catherine, 2010, null). % Still married
+married(harry, meghan, 2020, null). % Still married
+married(olivia, james, 2025, null). % Same-sex marriage (female partners)
+married(charlotte, george_iv, 2040, null). % Future marriage
+
+% Parent-child relationships (including step and adopted)
+parent(john_sr, john_jr).
+parent(mary_sr, john_jr).
+parent(george_i, george_ii).
+parent(anne_i, george_ii).
+parent(john_jr, william_i).
+parent(elizabeth_i, william_i).
+parent(john_jr, henry).
+parent(elizabeth_i, henry).
+parent(robert, thomas).
+parent(margaret, thomas).
+parent(george_ii, george_iii).
+parent(george_ii, sarah).
+parent(william_i, john_iii).
+parent(mary_ii, john_iii).
+parent(henry, anne_ii).
+parent(emma, anne_ii).
+parent(thomas, philip).
+parent(thomas, grace). % Half-siblings
+parent(george_iii, michael).
+parent(sarah, diana).
+parent(john_iii, william_ii).
+parent(anne_ii, william_ii).
+parent(john_iii, harry).
+parent(anne_ii, harry).
+parent(philip, olivia).
+parent(grace, olivia).
+parent(michael, james).
+parent(diana, james).
+parent(edward_ii, charlotte).
+parent(sophie, charlotte).
+parent(william_ii, george_iv).
+parent(catherine, george_iv).
+parent(harry, amelia).
+parent(meghan, amelia).
+parent(olivia, arthur). % Adopted child
+parent(james, arthur). % Adopted child
+parent(charlotte, lily).
+parent(george_iv, leo).
+parent(george_iv, isla).
+
+% Step-parent relationships
+step_parent(grace, michael). % Grace married Philip who is father of Michael
+step_parent(meghan, charlotte). % Meghan married Harry who is uncle of Charlotte
+step_parent(sophie, william_ii). % Sophie married Edward who is uncle of William
+
+% Half-sibling relationships
+half_sibling(philip, grace). % Share father Thomas but different mothers
+half_sibling(george_iii, sarah). % Share father George_II but different mothers
+
+% Adoptions
+adopted(arthur, olivia).
+adopted(arthur, james).
+
+% In-laws
+in_law(catherine, harry).
+in_law(meghan, william_ii).
+in_law(sophie, anne_ii).
+
+% Rules for family relationships
+father(Father, Child) :- parent(Father, Child), male(Father).
+mother(Mother, Child) :- parent(Mother, Child), female(Mother).
+
+child(Child, Parent) :- parent(Parent, Child).
+
+son(Child, Parent) :- parent(Parent, Child), male(Child).
+daughter(Child, Parent) :- parent(Parent, Child), female(Child).
+
+sibling(Sibling1, Sibling2) :-
+    parent(Parent, Sibling1),
+    parent(Parent, Sibling2),
+    Sibling1 \= Sibling2.
+
+grandparent(Grandparent, Grandchild) :-
+    parent(Grandparent, Parent),
+    parent(Parent, Grandchild).
+
+grandchild(Grandchild, Grandparent) :-
+    grandparent(Grandparent, Grandchild).
+
+uncle(Uncle, Person) :-
+    sibling(Uncle, Parent),
+    parent(Parent, Person),
+    male(Uncle).
+uncle(Uncle, Person) :-
+    married(Uncle, Aunt, _, _),
+    sister(Aunt, Parent),
+    parent(Parent, Person).
+
+aunt(Aunt, Person) :-
+    sibling(Aunt, Parent),
+    parent(Parent, Person),
+    female(Aunt).
+aunt(Aunt, Person) :-
+    married(Uncle, Aunt, _, _),
+    brother(Uncle, Parent),
+    parent(Parent, Person).
+
+cousin(Cousin1, Cousin2) :-
+    parent(Parent1, Cousin1),
+    parent(Parent2, Cousin2),
+    sibling(Parent1, Parent2).
+
+ancestor(Ancestor, Descendant) :-
+    parent(Ancestor, Descendant).
+ancestor(Ancestor, Descendant) :-
+    parent(Ancestor, Person),
+    ancestor(Person, Descendant).
+
+descendant(Descendant, Ancestor) :-
+    ancestor(Ancestor, Descendant).
+
+step_parent(StepParent, Child) :-
+    married(StepParent, Parent, _, _),
+    parent(Parent, Child),
+    not(parent(StepParent, Child)).
+
+step_child(StepChild, StepParent) :-
+    step_parent(StepParent, StepChild).
+
+half_sibling(HalfSibling1, HalfSibling2) :-
+    parent(Parent, HalfSibling1),
+    parent(Parent, HalfSibling2),
+    parent(OtherParent, HalfSibling1),
+    not(parent(OtherParent, HalfSibling2)),
+    HalfSibling1 \= HalfSibling2.
+
+% Query examples:
+% father(X, william_ii).
+% ancestor(john_sr, X).
+% cousin(amelia, X).
+% half_sibling(philip, grace).
+% step_parent(X, charlotte).

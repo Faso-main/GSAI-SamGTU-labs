@@ -14,10 +14,10 @@ THRESHOLD=0.5
 def load_data_from_csv(filename):
     data = pd.read_csv(filename)
     X = data.drop('diabetic', axis=1).values.tolist()
-    y = [[label] for label in data['diabetic'].values]  # Преобразуем в формат [[0], [1], ...]
+    y = [[label] for label in data['diabetic'].values]  
     return X, y
 
-# Класс нейрона
+
 class Neuron:
     def __init__(self, num_inputs):
         self.weights = [random.uniform(-1, 1) for _ in range(num_inputs)]
@@ -45,12 +45,12 @@ class Neuron:
             self.weights[i] += learning_rate * self.error * self.inputs[i]
         self.bias += learning_rate * self.error
 
-# Класс нейронной сети
+
 class NeuralNetwork:
-    def __init__(self, layers):
+    def __init__(self, layers: any):
         self.layers = []
         for i in range(1, len(layers)):
-            layer = [Neuron(layers[i-1]) for _ in range(layers[i])]
+            layer = [Neuron(layers[i-1]) for itr in range(layers[i])]
             self.layers.append(layer)
     
     def forward(self, inputs):
@@ -89,12 +89,10 @@ class NeuralNetwork:
 # Основной код
 if __name__ == "__main__":
     try:
-        # Загрузка данных
         X, y = load_data_from_csv(CSV_PATH)
         print(f"Успешно загружено {len(X)} примеров")
         
-        # Создаем и обучаем сеть
-        nn = NeuralNetwork([8, 4, 1])
+        nn = NeuralNetwork([8, 4, 1]) # входной - скрытый - выходной
         nn.train(X, y, epochs=1000, learning_rate=0.1)
 
         # Тестовые пациенты

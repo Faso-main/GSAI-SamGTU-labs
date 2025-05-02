@@ -1,0 +1,225 @@
+/*
+% https://swish.swi-prolog.org/ 
+*/
+
+% GENERATION 1 (1800s)
+person(alfred_great, male, 1820, 1890).
+person(victoria_eldest, female, 1825, 1895).
+person(leonard_merchant, male, 1815, 1880).
+person(isabella_secret, female, 1830, 1910).
+
+% GENERATION 2
+person(edward_iii, male, 1850, 1920).
+person(alice_mae, female, 1855, 1930).
+person(george_merchant, male, 1852, 1925).
+person(mary_hidden, female, 1860, 1940).
+person(henry_exile, male, 1865, 1945). % Estranged branch
+person(rose_unknown, female, 1870, 1950). % Hidden relationship
+
+% GENERATION 3
+person(arthur_stonemason, male, 1880, 1960).
+person(margaret_artist, female, 1885, 1970).
+person(william_banker, male, 1890, 1980).
+person(elizabeth_teacher, female, 1895, 1990).
+person(thomas_blacksheep, male, 1900, 1985). % Family outcast
+person(emily_seamstress, female, 1905, 2000).
+person(richard_adopted, male, 1910, 2005). % Adopted
+
+% GENERATION 4
+person(george_wwii, male, 1925, 2010).
+person(anne_nurse, female, 1930, 2020).
+person(charles_ceo, male, 1935, alive).
+person(diana_socialite, female, 1940, 2022).
+person(edward_iv, male, 1945, alive).
+person(fiona_actress, female, 1950, alive).
+person(gregory_disowned, male, 1955, alive). % Estranged
+person(helen_musician, female, 1960, alive).
+
+% GENERATION 5
+person(robert_iii, male, 1970, alive).
+person(laura_lawyer, female, 1975, alive).
+person(steven_entrepreneur, male, 1980, alive).
+person(jennifer_doctor, female, 1985, alive).
+person(michael_iv, male, 1990, alive).
+person(natalie_scientist, female, 1995, alive).
+person(oliver_artist, male, 2000, alive). % Changed surname
+person(penelope_writer, female, 2005, alive).
+
+% GENERATION 6
+person(quentin_vi, male, 2020, alive).
+person(rebecca_young, female, 2022, alive).
+person(samuel_adopted, male, 2023, alive). % International adoption
+person(tiffany_influencer, female, 2025, alive).
+person(ulysses_heir, male, 2027, alive). % Business heir apparent
+
+% GENERATION 7
+person(victoria_newborn, female, 2030, alive).
+person(winston_baby, male, 2031, alive).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% COMPLEX RELATIONSHIPS %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% MARRIAGES (including polygamous and serial marriages)
+married(alfred_great, victoria_eldest, 1845, 1890). % Until death
+married(alfred_great, isabella_secret, 1860, 1890). % Secret polygamous marriage
+married(leonard_merchant, victoria_eldest, 1855, 1880). % After Alfred's death
+married(edward_iii, alice_mae, 1875, 1920).
+married(edward_iii, mary_hidden, 1880, 1920). % Concurrent marriage
+married(george_merchant, mary_hidden, 1885, 1925).
+married(arthur_stonemason, margaret_artist, 1905, 1960).
+married(william_banker, elizabeth_teacher, 1920, 1980).
+married(william_banker, emily_seamstress, 1930, 1980). % Second marriage
+married(george_wwii, anne_nurse, 1950, 2010).
+married(charles_ceo, diana_socialite, 1960, 1990). % Divorced
+married(charles_ceo, fiona_actress, 1995, null). % Current
+married(edward_iv, helen_musician, 1970, 2005). % Divorced
+married(robert_iii, laura_lawyer, 2000, 2020). % Divorced
+married(robert_iii, jennifer_doctor, 2025, null). % Current
+married(steven_entrepreneur, natalie_scientist, 2010, null).
+
+% PARENT-CHILD (with more complexity)
+parent(alfred_great, edward_iii).
+parent(victoria_eldest, edward_iii).
+parent(alfred_great, george_merchant).
+parent(isabella_secret, george_merchant). % Secret child
+parent(leonard_merchant, mary_hidden).
+parent(edward_iii, arthur_stonemason).
+parent(alice_mae, arthur_stonemason).
+parent(edward_iii, william_banker).
+parent(mary_hidden, william_banker). % Half-sibling to arthur
+parent(george_merchant, elizabeth_teacher).
+parent(henry_exile, thomas_blacksheep). % Estranged branch
+parent(rose_unknown, thomas_blacksheep). % Unknown mother
+parent(arthur_stonemason, george_wwii).
+parent(margaret_artist, george_wwii).
+parent(william_banker, charles_ceo).
+parent(elizabeth_teacher, charles_ceo).
+parent(william_banker, edward_iv).
+parent(emily_seamstress, edward_iv). % Different mother
+parent(thomas_blacksheep, gregory_disowned).
+parent(george_wwii, robert_iii).
+parent(anne_nurse, robert_iii).
+parent(charles_ceo, steven_entrepreneur).
+parent(diana_socialite, steven_entrepreneur).
+parent(charles_ceo, michael_iv).
+parent(fiona_actress, michael_iv). % Half-brother
+parent(edward_iv, oliver_artist).
+parent(helen_musician, oliver_artist).
+parent(robert_iii, quentin_vi).
+parent(laura_lawyer, quentin_vi).
+parent(steven_entrepreneur, samuel_adopted). % Adopted
+parent(natalie_scientist, samuel_adopted).
+parent(michael_iv, ulysses_heir).
+parent(quentin_vi, victoria_newborn).
+
+% ADOPTIONS
+adopted(richard_adopted, william_banker).
+adopted(richard_adopted, emily_seamstress).
+adopted(samuel_adopted, steven_entrepreneur).
+adopted(samuel_adopted, natalie_scientist).
+adopted(penelope_writer, gregory_disowned). % Secret adoption
+
+% GODPARENTS
+godparent(george_wwii, michael_iv).
+godparent(fiona_actress, natalie_scientist).
+godparent(thomas_blacksheep, oliver_artist). % Despite estrangement
+
+% FOSTER PARENTS
+foster_parent(elizabeth_teacher, richard_adopted).
+foster_parent(emily_seamstress, gregory_disowned).
+
+% STEP RELATIONSHIPS
+step_parent(isabella_secret, edward_iii). % Alfred's second wife
+step_parent(mary_hidden, arthur_stonemason).
+step_parent(emily_seamstress, charles_ceo).
+step_parent(fiona_actress, steven_entrepreneur).
+step_parent(jennifer_doctor, quentin_vi).
+
+% HALF-SIBLINGS
+half_sibling(edward_iii, george_merchant). % Same father, different mothers
+half_sibling(arthur_stonemason, william_banker).
+half_sibling(charles_ceo, edward_iv).
+half_sibling(steven_entrepreneur, michael_iv).
+
+% SECRET RELATIONSHIPS
+secret_child(george_merchant, alfred_great, isabella_secret).
+secret_child(thomas_blacksheep, henry_exile, rose_unknown).
+secret_child(penelope_writer, gregory_disowned, unknown). % Mother unknown
+
+% FAMILY FEUDS
+feuding(henry_exile, edward_iii, 1880, 1945).
+feuding(thomas_blacksheep, arthur_stonemason, 1930, 1985).
+feuding(gregory_disowned, charles_ceo, 1980, null).
+
+% BUSINESS RELATIONSHIPS
+family_business(merchant_inc, [leonard_merchant, george_merchant, william_banker]).
+family_business(stonemason_ltd, [arthur_stonemason, george_wwii, robert_iii]).
+family_business(modern_corp, [charles_ceo, steven_entrepreneur, ulysses_heir]).
+
+% INHERITANCE DISPUTES
+disputed_inheritance(edward_iii, [arthur_stonemason, william_banker], 1920).
+disputed_inheritance(charles_ceo, [steven_entrepreneur, michael_iv], 2020).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% RELATIONSHIP RULES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Basic relationships
+father(F, C) :- parent(F, C), male(F).
+mother(M, C) :- parent(M, C), female(F).
+
+% Extended family
+grandparent(GP, GC) :- parent(GP, P), parent(P, GC).
+great_grandparent(GGP, GGC) :- parent(GGP, GP), parent(GP, P), parent(P, GGC).
+
+sibling(S1, S2) :- parent(P, S1), parent(P, S2), S1 \= S2.
+half_sibling(S1, S2) :- 
+    (father(F, S1), father(F, S2); mother(M, S1), mother(M, S2)),
+    \+ (father(F, S1), father(F, S2), mother(M, S1), mother(M, S2)),
+    S1 \= S2.
+
+step_sibling(S1, S2) :-
+    parent(P1, S1), parent(P2, S2),
+    married(P1, SP, _, _), married(P2, SP, _, _),
+    S1 \= S2, P1 \= P2.
+
+% Complex relationships
+secret_uncle(U, P) :-
+    secret_child(U, GP, _),
+    parent(GP, Parent),
+    parent(Parent, P),
+    male(U).
+
+godparent(GP, C) :-
+    (father(F, C); mother(M, C)),
+    (sibling(GP, F); sibling(GP, M); close_friend(GP, F); close_friend(GP, M)).
+
+foster_child(C, FP) :-
+    foster_parent(FP, C),
+    \+ parent(FP, C).
+
+business_partner(P1, P2) :-
+    family_business(B, Members),
+    member(P1, Members),
+    member(P2, Members),
+    P1 \= P2.
+
+% Family feud rules
+feuding(P1, P2, Start, End) :-
+    (End = null -> true ; End > Start),
+    ancestor(A, P1),
+    ancestor(A, P2),
+    P1 \= P2.
+
+% Inheritance rules
+potential_heir(Heir, Estate) :-
+    disputed_inheritance(Estate, Heirs, _),
+    member(Heir, Heirs).
+
+% Query examples:
+% secret_child(X, alfred_great, _).
+% feuding(X, Y, _, _).
+% business_partner(charles_ceo, X).
+% potential_heir(X, charles_ceo).
+% foster_child(X, elizabeth_teacher).
