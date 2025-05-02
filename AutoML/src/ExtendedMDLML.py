@@ -5,15 +5,29 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from sklearn.preprocessing import StandardScaler
 from scipy.stats import randint, uniform
 import pandas as pd
-from medica_data import *
+import os
+
+
+# Configuration
+CSV_PATH=os.path.join('AutoML','src','medical_data.csv')
+
+
+# Загрузка данных из CSV файла
+def load_data_from_csv(filename):
+    data = pd.read_csv(filename)
+    X = data.drop('diabetic', axis=1).values
+    y = data['diabetic'].values
+    return X, y
 
 # Тестовые пациенты
-test_patient_1 = [0.15, 0.20, 0.52, 0.26, 0.33, 0.40, 0.29, 0.37] # нет диабета
-test_patient_2 = [0.60, 0.82, 0.70, 0.51, 0.66, 0.55, 0.58, 0.62] # диабет
+test_patient_1 = [0.15, 0.20, 0.52, 0.26, 0.33, 0.40, 0.29, 0.37]  # нет диабета
+test_patient_2 = [0.60, 0.82, 0.70, 0.51, 0.66, 0.55, 0.58, 0.62]  # диабет
 
-# Подготовка данных
-X = np.array(medical_data_expended)
-y = np.array(labels_expended).flatten()
+# Загрузка данных
+try: X, y = load_data_from_csv(CSV_PATH)
+except Exception as e:
+    print(f"Ошибка при загрузке данных: {str(e)}")
+    exit()
 
 # Проверка баланса классов (исходного набора данных)
 unique_original, counts_original = np.unique(y, return_counts=True)
